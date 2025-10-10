@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% if page.layout == "archive" %}
+  <link rel="stylesheet" href="{{ '/assets/css/archive.css' | relative_url }}">
+  {% endif %}
+</head>
+
+
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/archive/' | relative_url }}">Archive</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="posts">
+    {% for post in site.posts %}
+    <article class="post-card">
+      <!-- 左侧内容 -->
+      <div class="post-content">
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <div class="post-excerpt">
+          <p class="typewriter"
+            data-text="{% if post.excerpt %}{{ post.excerpt | strip_html | strip_newlines }}{% else %}Nothing just walk{% endif %}">
+          </p>
+        </div>
+      </div>
+
+      <!-- 右侧图片 -->
+      {% if post.image %}
+      <div class="post-image">
+        <img src="{{ post.image }}" alt="{{ post.title }}">
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </main>
+
+  <footer>
+    <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved.</p>
+  </footer>
+
+  <!-- 打字机效果脚本 -->
+  <script>
+    document.querySelectorAll(".posts article").forEach(article => {
+      const typewriter = article.querySelector(".typewriter");
+      let animated = false; // 确保每个文章只触发一次
+
+      article.addEventListener("mouseenter", () => {
+        if (!animated) {
+          typewriter.textContent = "";
+          const text = typewriter.getAttribute("data-text");
+          let i = 0;
+
+          function type() {
+            if (i < text.length) {
+              typewriter.textContent += text[i];
+              i++;
+
+              // 页面滚动，让最新文字可见
+              typewriter.scrollIntoView({ behavior: "smooth", block: "end" });
+
+              setTimeout(type, 80); // 调整打字速度
+            } else {
+              // 打完后，保留文字，不消失
+              typewriter.style.borderRight = "none";
+            }
+          }
+
+          type();
+          animated = true;
+        }
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>

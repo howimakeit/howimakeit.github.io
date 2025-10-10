@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/post-page.css' | relative_url }}">
+  <!-- 引入文章详情页专用 CSS -->
+</head>
+
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/archive' | relative_url }}">Archive</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 文章详情页主体 -->
+  <main class="post-page">
+    <h1>{{ page.title }}</h1>
+
+    {% if page.excerpt %}
+    <div class="post-meta">{{ page.excerpt }}</div>
+    {% else %}
+    <div class="post-meta">Nothing just walk</div>
+    {% endif %}
+
+    <div class="post-content">
+      {{ content }}
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

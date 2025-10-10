@@ -1,0 +1,289 @@
+/* 基础布局 */
+/* 全局 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+
+  /* 夜空渐变背景 */
+  background: linear-gradient(135deg, #0d1117 0%, #1e2329 50%, #000000 100%);
+  color: #e6edf3;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 三层星空 */
+.stars,
+.stars2,
+.stars3 {
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 小星星层 */
+.stars {
+  background: radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 70% 80%, white, transparent),
+    radial-gradient(1px 1px at 50% 60%, white, transparent),
+    radial-gradient(1px 1px at 90% 10%, white, transparent),
+    radial-gradient(1px 1px at 10% 50%, white, transparent);
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: moveStars 60s linear infinite, twinkle 2s infinite alternate;
+  opacity: 0.6;
+}
+
+/* 中等星星层 */
+.stars2 {
+  background: radial-gradient(2px 2px at 30% 40%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(2px 2px at 80% 20%, white, transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: moveStars 120s linear infinite, twinkle 3s infinite alternate;
+  opacity: 0.4;
+}
+
+/* 大星星层 */
+.stars3 {
+  background: radial-gradient(3px 3px at 50% 50%, white, transparent),
+    radial-gradient(3px 3px at 70% 30%, white, transparent);
+  background-repeat: repeat;
+  background-size: 500px 500px;
+  animation: moveStars 180s linear infinite, twinkle 4s infinite alternate;
+  opacity: 0.3;
+}
+
+/* 流动动画 */
+@keyframes moveStars {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+
+  to {
+    transform: translateX(-1000px) translateY(-500px);
+  }
+}
+
+/* 闪烁动画 */
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* 顶部栏 */
+header {
+  background: rgba(13, 17, 23, 0.9);
+  /* 半透明暗色 */
+  backdrop-filter: blur(6px);
+  /* 毛玻璃效果 */
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  /* 顶部固定 */
+  top: 0;
+  z-index: 1000;
+}
+
+header nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+header nav ul li a {
+  color: #e6edf3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+header nav ul li a:hover {
+  color: #58a6ff;
+  /* 高亮蓝色 */
+}
+
+/* 主体内容 */
+main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.posts article:hover {
+  transform: translateY(-5px);
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* 卡片容器 */
+.post-card {
+  display: block;
+  width: 560px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(9px);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 左侧内容 */
+.post-content {
+  position: absolute;
+  left: 15px;
+  right: 370px;
+  top: 15px;
+  bottom: 15px;
+  flex: 1;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* 标题在上方 */
+  overflow: hidden;
+}
+
+/* 标题固定在顶部 */
+.post-content h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #58a6ff;
+  /* 标题颜色 */
+  flex-shrink: 0;
+  /* 不会被压缩 */
+}
+
+.post-content h2 a {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+
+  /* 渐变背景 */
+  background: linear-gradient(270deg,
+      #58a6ff,
+      #79c0ff,
+      #1f6feb,
+      #58a6ff);
+  background-size: 400% 400%;
+
+  /* 标准写法 + WebKit 前缀 */
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* 让文字透明，显示背景 */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  /* 动画流动 */
+  animation: gradient-flow 6s ease infinite;
+}
+
+/* 渐变流动动画 */
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 简介区域可滚动 */
+.post-excerpt {
+  flex: 1;
+  overflow-y: auto;
+  /* 超出时可滚动 */
+  padding-right: 0.7rem;
+  /* 给滚动条留点空间 */
+}
+
+.post-excerpt::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+  /* 可选，防止留白 */
+}
+
+
+/* 打字机文字样式 */
+.typewriter {
+  font-family: monospace;
+  font-size: 1rem;
+  color: #222;
+  white-space: normal;
+  /* ✅ 允许换行 */
+  word-break: break-word;
+  /* ✅ 长单词断行 */
+}
+
+/* 右侧图片固定占满 */
+.post-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  /* 占整个卡片的一半 */
+  height: 100%;
+  flex-shrink: 0;
+  background-position: center center;
+  background-size: contain;
+  /* 居中显示 */
+  background-repeat: no-repeat;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* 图片等比例裁剪，填满容器 */
+}
+
+/* 底部栏 */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(13, 17, 23, 0.9);
+  color: #8b949e;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+}

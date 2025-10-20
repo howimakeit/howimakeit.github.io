@@ -70,7 +70,7 @@
               i++;
 
               // 页面滚动，让最新文字可见
-              typewriter.scrollIntoView({ behavior: "smooth", block: "end" });
+              typewriter.parentElement.scrollTop = typewriter.parentElement.scrollHeight;
 
               setTimeout(type, 80); // 调整打字速度
             } else {

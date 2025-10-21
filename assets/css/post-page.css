@@ -171,7 +171,7 @@ header nav ul li a:hover {
 p {
   text-indent: 2em;
   /* 首行缩进两个汉字宽度 */
-  line-height: 1.8;
+  line-height: 2;
   /* 行间距略大，看起来更舒服 */
 }
 

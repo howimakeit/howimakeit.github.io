@@ -1,0 +1,307 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/archive.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/deadline.css' | relative_url }}">
+</head>
+
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/archive/' | relative_url }}">Archive</a></li>
+        <li><a href="{{ '/deadline/' | relative_url }}">deadline</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!---------------------------------------------------------------------------------------->
+
+  <div class="bigBackbox">
+    <div class="time-display">
+      <span class='hour'>54</span>
+      <span class='fenHao'>:</span>
+      <span class='min'>00</span>
+    </div>
+    <div class='icon'>
+      <span class="begin"><img src="/assets/images/begin.svg"></span>
+      <span class="restart"><img src="/assets/images/restart.svg"></span>
+      <span class="time-control">
+        <label>
+          工作时间（分钟）：
+          <input type="number" id="workInput" min="1" max="120" value="54">
+        </label>
+        <label>
+          休息时间（分钟）：
+          <input type="number" id="restInput" min="1" max="60" value="6">
+        </label>
+        <button id="applyTime">应用</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- 弹窗 -->
+  <div id="popup" style="display:none; position:fixed; top:50%; left:50%; 
+  transform:translate(-50%,-50%); background:rgba(0,0,0,0.4); color:white; 
+  padding:20px; border-radius:10px; text-align:center; z-index:2000;">
+    <p id="popupText"></p>
+    <button id="popupBtn">确定</button>
+  </div>
+
+  <div class="todolist">
+    <span class="title">· ToDoList ·</span>
+    <div class="tasks"></div>
+    <div class="todolist-buttons">
+      <button id="addTask">添加</button>
+      <button id="deleteTask">删除</button>
+    </div>
+  </div>
+
+
+  <script>
+    // ===================== 获取元素 =====================
+    const hourEl = document.querySelector('.hour');
+    const minEl = document.querySelector('.min');
+    const beginBtn = document.querySelector('.begin');
+    const restartBtn = document.querySelector('.restart');
+    const workInput = document.getElementById('workInput');
+    const restInput = document.getElementById('restInput');
+    const applyBtn = document.getElementById('applyTime');
+
+    // 弹窗元素
+    const popup = document.getElementById('popup');
+    const popupText = document.getElementById('popupText');
+    const popupBtn = document.getElementById('popupBtn');
+
+    // ===================== 初始时间（单位：秒） =====================
+    let WORK_TIME = 54 * 60;
+    let REST_TIME = 6 * 60;
+
+    let remainingTime = WORK_TIME;
+    let timer = null;
+    let isWorking = true;   // 当前模式 true=工作 false=休息
+    let isRunning = false;  // 是否正在倒计时
+    let currentAudio = null; // 当前播放的提示音
+
+    // ===================== 格式化时间 =====================
+    function formatTime(seconds) {
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      return { m, s };
+    }
+
+    // ===================== 更新显示 =====================
+    function updateDisplay() {
+      const { m, s } = formatTime(remainingTime);
+      hourEl.textContent = m;
+      minEl.textContent = s;
+    }
+
+    // ===================== 弹窗控制 =====================
+    function showPopup(message) {
+      popupText.textContent = message;
+      popup.style.display = 'block';
+      if (currentAudio) {
+        currentAudio.play().catch(e => console.log("播放失败", e));
+      }
+    }
+
+    popupBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+      }
+    });
+
+    // ===================== 开始 / 暂停切换 =====================
+    function toggleTimer() {
+      if (!isRunning) {
+        startTimer();
+        beginBtn.classList.remove('paused'); // 开始时移除 paused
+      } else {
+        pauseTimer();
+        beginBtn.classList.add('paused');    // 暂停时添加 paused
+      }
+    }
+
+    // ===================== 启动计时 =====================
+    function startTimer() {
+      if (isRunning) return;
+      isRunning = true;
+
+      timer = setInterval(() => {
+        remainingTime--;
+
+        if (remainingTime <= 0) {
+          clearInterval(timer);
+          isRunning = false;
+
+          // 切换模式
+          if (isWorking) {
+            isWorking = false;
+            remainingTime = REST_TIME;
+            updateDisplay();
+
+            currentAudio = new Audio('/assets/sounds/finish.mp3');
+            currentAudio.loop = true;
+            showPopup("🎉 工作时间结束！请休息一下～");
+
+          } else {
+            isWorking = true;
+            remainingTime = WORK_TIME;
+            updateDisplay();
+
+            currentAudio = new Audio('/assets/sounds/finish.mp3');
+            currentAudio.loop = true;
+            showPopup("☕ 休息结束！准备开始新一轮工作吧！");
+          }
+
+        } else {
+          updateDisplay();
+        }
+      }, 1000);
+    }
+
+    // ===================== 暂停计时 =====================
+    function pauseTimer() {
+      clearInterval(timer);
+      isRunning = false;
+    }
+
+    // ===================== 停止计时 =====================
+    function stopTimer() {
+      clearInterval(timer);
+      isRunning = false;
+    }
+
+    // ===================== 重置时间 =====================
+    function resetTimer() {
+      stopTimer();
+      beginBtn.classList.remove('paused'); // 重置时移除 paused
+      remainingTime = isWorking ? WORK_TIME : REST_TIME;
+      updateDisplay();
+    }
+
+    // ===================== 应用新设置时间 =====================
+    applyBtn.addEventListener('click', () => {
+      const newWork = parseInt(workInput.value);
+      const newRest = parseInt(restInput.value);
+
+      if (isNaN(newWork) || isNaN(newRest) || newWork <= 0 || newRest <= 0) {
+        alert("⚠️ 请输入有效的正整数时间！");
+        return;
+      }
+
+      WORK_TIME = newWork * 60;
+      REST_TIME = newRest * 60;
+
+      resetTimer(); // 停止计时并刷新显示
+      alert(`⏱️ 时间设置成功：工作 ${newWork} 分钟，休息 ${newRest} 分钟`);
+    });
+
+    // ===================== 初始化显示 =====================
+    updateDisplay();
+
+    // ===================== 按钮绑定 =====================
+    beginBtn.addEventListener('click', toggleTimer);
+    restartBtn.addEventListener('click', resetTimer);
+
+    // ---------------- 以下是todolist的js逻辑 ---------------
+    // ===================== 获取元素 =====================
+    const tasksContainer = document.querySelector('.tasks');
+    const addBtn = document.getElementById('addTask');
+    const deleteBtn = document.getElementById('deleteTask');
+
+    let selectedTask = null;
+    let isDragging = false;
+    let dragTimer = null;
+    let dragTask = null;
+
+    // ===================== 添加任务 =====================
+    addBtn.addEventListener('click', () => {
+      const taskText = prompt('请输入要做的事情:');
+      if (!taskText) return;
+
+      const task = document.createElement('span');
+      task.textContent = taskText;
+
+      // 点击选中任务
+      task.addEventListener('click', () => {
+        if (selectedTask) selectedTask.classList.remove('selected');
+        task.classList.add('selected');
+        selectedTask = task;
+      });
+
+      // 拖动逻辑
+      task.addEventListener('mousedown', (e) => {
+        dragTimer = setTimeout(() => {
+          isDragging = true;
+          dragTask = task;
+          task.classList.add('dragging'); // 放大效果
+
+          const startY = e.clientY;
+          const initialIndex = Array.from(tasksContainer.children).indexOf(task);
+
+          function onMouseMove(eMove) {
+            const deltaY = eMove.clientY - startY;
+            task.style.transform = `translateY(${deltaY}px) scale(1.05)`;
+
+            // 交换位置
+            const tasksArray = Array.from(tasksContainer.children).filter(t => t !== task);
+            tasksArray.forEach((t, idx) => {
+              const rect = t.getBoundingClientRect();
+              const middleY = rect.top + rect.height / 2;
+              if (startY + deltaY > middleY && idx >= initialIndex) {
+                tasksContainer.insertBefore(task, t.nextSibling);
+              }
+              if (startY + deltaY < middleY && idx < initialIndex) {
+                tasksContainer.insertBefore(task, t);
+              }
+            });
+          }
+
+          function onMouseUp() {
+            task.style.transform = 'none';
+            task.classList.remove('dragging');
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            isDragging = false;
+            dragTask = null;
+          }
+
+          document.addEventListener('mousemove', onMouseMove);
+          document.addEventListener('mouseup', onMouseUp);
+        }, 500); // 0.5 秒判定
+      });
+
+      task.addEventListener('mouseup', () => {
+        clearTimeout(dragTimer);
+      });
+
+      task.addEventListener('mouseleave', () => {
+        clearTimeout(dragTimer);
+      });
+
+      tasksContainer.appendChild(task);
+    });
+
+    // ===================== 删除任务 =====================
+    deleteBtn.addEventListener('click', () => {
+      if (selectedTask) {
+        tasksContainer.removeChild(selectedTask);
+        selectedTask = null;
+      } else {
+        alert('请先选中一个任务再删除！');
+      }
+    });
+
+
+  </script>

@@ -1,0 +1,365 @@
+/* 基础布局 */
+/* 全局 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+
+  /* 夜空渐变背景 */
+  background: linear-gradient(135deg, #0d1117 0%, #1e2329 50%, #000000 100%);
+  color: #e6edf3;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 三层星空 */
+.stars,
+.stars2,
+.stars3 {
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 小星星层 */
+.stars {
+  background: radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 70% 80%, white, transparent),
+    radial-gradient(1px 1px at 50% 60%, white, transparent),
+    radial-gradient(1px 1px at 90% 10%, white, transparent),
+    radial-gradient(1px 1px at 10% 50%, white, transparent);
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: moveStars 60s linear infinite, twinkle 2s infinite alternate;
+  opacity: 0.6;
+}
+
+/* 中等星星层 */
+.stars2 {
+  background: radial-gradient(2px 2px at 30% 40%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(2px 2px at 80% 20%, white, transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: moveStars 120s linear infinite, twinkle 3s infinite alternate;
+  opacity: 0.4;
+}
+
+/* 大星星层 */
+.stars3 {
+  background: radial-gradient(3px 3px at 50% 50%, white, transparent),
+    radial-gradient(3px 3px at 70% 30%, white, transparent);
+  background-repeat: repeat;
+  background-size: 500px 500px;
+  animation: moveStars 180s linear infinite, twinkle 4s infinite alternate;
+  opacity: 0.3;
+}
+
+/* 流动动画 */
+@keyframes moveStars {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+
+  to {
+    transform: translateX(-1000px) translateY(-500px);
+  }
+}
+
+/* 闪烁动画 */
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* 顶部栏 */
+header {
+  background: rgba(13, 17, 23, 0.9);
+  /* 半透明暗色 */
+  backdrop-filter: blur(6px);
+  /* 毛玻璃效果 */
+  color: #fff;
+  padding: 1rem 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  /* 顶部固定 */
+  top: 0;
+  z-index: 1000;
+}
+
+header nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+header nav ul li a {
+  color: #e6edf3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+header nav ul li a:hover {
+  color: #58a6ff;
+  /* 高亮蓝色 */
+}
+
+/* 居中毛玻璃片 */
+.bigBackbox {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  top: 20%;
+  left: 5%;
+
+  width: 860px;
+  height: 450px;
+
+  background: rgba(255, 255, 255, 0.08);
+  /* 半透明 */
+  backdrop-filter: blur(1px) saturate(180%);
+  -webkit-backdrop-filter: blur(1px) saturate(180%);
+
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+
+  z-index: 10;
+  transition: all 0.4s ease;
+}
+
+/* 悬停时轻微发光 */
+.glass-panel:hover {
+  box-shadow: 0 0 50px rgba(88, 166, 255, 0.3);
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+.icon {
+  display: flex;
+  margin-top: auto;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon img {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  transition: filter 0.3s ease;
+}
+
+/* 鼠标悬停时变为深蓝色 */
+.icon img:hover {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(100%) saturate(500%) hue-rotate(200deg);
+}
+
+.begin,
+.restart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.begin.paused img {
+  filter: brightness(0) saturate(100%) invert(29%) sepia(80%) saturate(800%) hue-rotate(190deg);
+  /* 深蓝高亮 */
+  transform: scale(1.1);
+  /* 稍微放大一点 */
+  box-shadow: 0 0 10px rgba(88, 166, 255, 0.6);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.time-display {
+  margin-top: -7%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* 数字样式 - 黑色数字 */
+.hour,
+.min {
+  background-color: transparent;
+  color: #ffffff;
+  /* 黑色数字 */
+  margin: 0;
+  font-family: 'League Gothic';
+  font-size: 18rem;
+  font-weight: 900;
+  border-color: transparent;
+}
+
+/* 冒号样式 */
+.fenHao {
+  color: #ffffff;
+  /* 黑色冒号 */
+  font-weight: 900;
+  font-size: 18rem;
+  margin: 0 5px;
+}
+
+.time-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.time-control label {
+  font-size: 1.1rem;
+  color: #e6edf3;
+}
+
+.time-control input {
+  width: 60px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-align: center;
+}
+
+.time-control input:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 5px #58a6ff;
+}
+
+.time-control button {
+  padding: 5px 10px;
+  background: rgba(88, 166, 255, 0.2);
+  border: 1px solid rgba(88, 166, 255, 0.4);
+  color: #58a6ff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-control button:hover {
+  background: rgba(88, 166, 255, 0.4);
+}
+
+/* 以下是todolist的CSS控制表 */
+
+.todolist {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  left: 69%;
+  top: 11%;
+  width: 400px;
+  height: 600px;
+  background: rgba(255, 255, 255, 0.08);
+  /* 半透明 */
+  backdrop-filter: blur(1px) saturate(180%);
+  -webkit-backdrop-filter: blur(1px) saturate(180%);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+/* 屏幕宽度小于 1000px 时隐藏 */
+@media (max-width: 1000px) {
+  .todolist {
+    display: none;
+  }
+}
+
+.title {
+  font-size: 3rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tasks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tasks span {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px;
+  border-radius: 6px;
+  cursor: grab;
+  user-select: none;
+  transition: background 0.2s, border 0.2s, transform 0.2s;
+  /* 平滑过渡 transform */
+  word-wrap: break-word;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tasks span:active {
+  cursor: grabbing;
+  /* 取消 scale 弹跳 */
+  transform: none;
+  z-index: 1000;
+}
+
+/* 拖动触发后放大效果 */
+.tasks span.dragging {
+  transform: scale(1.05);
+  z-index: 1000;
+}
+
+.tasks span.selected {
+  border: 2px solid #58a6ff;
+  background: rgba(88, 166, 255, 0.2);
+}
+
+.todolist-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.todolist-buttons button {
+  padding: 5px 15px;
+  border-radius: 6px;
+  border: 1px solid rgba(88, 166, 255, 0.4);
+  background: rgba(88, 166, 255, 0.2);
+  color: #58a6ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.todolist-buttons button:hover {
+  background: rgba(88, 166, 255, 0.4);
+}

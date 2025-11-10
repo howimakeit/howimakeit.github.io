@@ -9,6 +9,10 @@
   {% if page.layout == "archive" %}
   <link rel="stylesheet" href="{{ '/assets/css/archive.css' | relative_url }}">
   {% endif %}
+
+  {% if page.layout == "deadline" %}
+  <link rel="stylesheet" href="{{ '/assets/css/deadline.css' | relative_url }}">
+  {% endif %}
 </head>
 
 
@@ -21,6 +25,7 @@
       <ul>
         <li><a href="{{ '/' | relative_url }}">Home</a></li>
         <li><a href="{{ '/archive/' | relative_url }}">Archive</a></li>
+        <li><a href="{{ '/deadline/' | relative_url }}">deadline</a></li>
       </ul>
     </nav>
   </header>

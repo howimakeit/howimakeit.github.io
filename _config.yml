@@ -43,7 +43,18 @@ social_links:
     values:
       layout: "post-page"
 
+collections:
+  road:
+    output: true
+    permalink: /road/:title/
 
+# 新增默认页面配置
+defaults:
+  - scope:
+      path: "" # 根路径
+      type: "pages"
+    values:
+      layout: "road" # 将默认布局设为 road（前提是你有 road 对应的布局文件）
 
 # Exclude from processing.
 # The following items will not be processed, by default.

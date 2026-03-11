@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/archive/' | relative_url }}">Archive</a></li>
+        <li><a href="{{ '/deadline/' | relative_url }}">Deadline</a></li>
+        <li><a href="{{ '/road/' | relative_url }}">road</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="posts">
+
+    {% assign road_posts = site.road | sort: "date" %}
+    {% for post in road_posts %}
+    <article class="post-card">
+      <div class="post-content" style="text-align:center;">
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <div class="post-excerpt typewriter"
+          data-text="{{ post.excerpt | default: post.content | strip_html | strip_newlines }}"></div>
+      </div>
+
+      {% if post.image %}
+      <div class="post-image">
+        <img src="{{ post.image }}" alt="{{ post.title }}" onerror="this.style.display='none'">
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+
+    {{ content }}
+
+  </main>
+
+  <footer>
+    <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll(".posts article").forEach(article => {
+      const typewriter = article.querySelector(".typewriter");
+      let animated = false;
+      article.addEventListener("mouseenter", () => {
+        if (!animated) {
+          typewriter.textContent = "";
+          const text = typewriter.getAttribute("data-text");
+          let i = 0;
+          function type() {
+            if (i < text.length) {
+              typewriter.textContent += text[i];
+              i++;
+              typewriter.parentElement.scrollTop = typewriter.parentElement.scrollHeight;
+              setTimeout(type, 80);
+            } else {
+              typewriter.style.borderRight = "none";
+            }
+          }
+          type();
+          animated = true;
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

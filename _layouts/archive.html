@@ -71,6 +71,46 @@
       });
     });
 
+    //密码是：随机漫步
+    // 改造后的密码验证逻辑（核心）
+    (function () {
+      const PASSWORD_KEY = "randomWalk_auth"; // 存储验证状态的key
+      const CORRECT_PASSWORD = "随机漫步";   // 你的密码
+
+      // 第一步：检查会话中是否已有验证通过的状态
+      const isAuthenticated = sessionStorage.getItem(PASSWORD_KEY) === "true";
+
+      // 如果已验证通过，直接跳过密码输入
+      if (isAuthenticated) {
+        return; // 终止函数，不执行后续验证逻辑
+      }
+
+      // 第二步：未验证过，执行密码输入逻辑
+      function verifyPassword() {
+        const userInput = prompt("请输入访问密码（随便输入）：");
+
+        // 处理用户取消输入的情况
+        if (userInput === null) {
+          alert("您取消了验证！");
+          window.location.href = "/road/";
+          return;
+        }
+
+        // 密码正确：保存验证状态到会话存储
+        if (userInput === CORRECT_PASSWORD) {
+          sessionStorage.setItem(PASSWORD_KEY, "true"); // 标记为已验证
+          alert("密码正确，欢迎访问！");
+        }
+        // 密码错误：跳转到road页面
+        else {
+          alert("密码错误！");
+          window.location.href = "/road/";
+        }
+      }
+
+      // 执行密码验证
+      verifyPassword();
+    })();
   </script>
 
 

@@ -26,7 +26,7 @@
 
   <main class="posts">
 
-    {% assign road_posts = site.road | sort: "date" %}
+    {% assign road_posts = site.road | sort: "date DESC" %}
     {% for post in road_posts %}
     <article class="post-card">
       <div class="post-content" style="text-align:center;">

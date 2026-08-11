@@ -1,40 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<<<<<<< HEAD
-<style>
-.image-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.92);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    cursor: zoom-out;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.image-modal.active {
-    opacity: 1;
-    visibility: visible;
-}
-.image-modal img {
-    max-width: 92%;
-    max-height: 92%;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
-    cursor: zoom-out;
-}
-</style>
-
-=======
->>>>>>> 0af13664151a39748aca8fc63e77fc3336488610
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,70 +75,6 @@
         }
       });
     });
-<<<<<<< HEAD
-
-// --- 图片点击放大功能 (仅对 class="single-image" 生效) ---
-document.addEventListener('DOMContentLoaded', function() {
-    // 选中所有带有 single-image 类的图片
-    const images = document.querySelectorAll('img.single-image');
-    
-    images.forEach(img => {
-        // 鼠标悬停时提示可点击
-        img.style.cursor = 'zoom-in';
-        
-        img.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            // 1. 创建遮罩层
-            const modal = document.createElement('div');
-            modal.className = 'image-modal';
-            
-            // 2. 在遮罩里放入相同图片的放大版
-            const largeImg = document.createElement('img');
-            largeImg.src = this.src;
-            largeImg.alt = this.alt || '放大图片';
-            modal.appendChild(largeImg);
-            
-            // 3. 添加到页面
-            document.body.appendChild(modal);
-            
-            // 4. 强制重绘后添加 active 类（实现淡入动画）
-            requestAnimationFrame(() => {
-                modal.classList.add('active');
-            });
-            
-            // 5. 点击遮罩（包括点击图片本身）关闭
-            modal.addEventListener('click', function() {
-                modal.classList.remove('active');
-                // 等待动画播放完再移除元素
-                setTimeout(() => {
-                    if (document.body.contains(modal)) {
-                        document.body.removeChild(modal);
-                    }
-                }, 300);
-            });
-            
-            // 6. 按 ESC 键关闭
-            document.addEventListener('keydown', function escHandler(e) {
-                if (e.key === 'Escape') {
-                    modal.classList.remove('active');
-                    setTimeout(() => {
-                        if (document.body.contains(modal)) {
-                            document.body.removeChild(modal);
-                        }
-                    }, 300);
-                    document.removeEventListener('keydown', escHandler);
-                }
-            });
-        });
-    });
-});
-
-  </script>
-
-
-
-=======
   </script>
 
 >>>>>>> 0af13664151a39748aca8fc63e77fc3336488610

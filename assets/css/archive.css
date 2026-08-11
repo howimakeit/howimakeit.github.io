@@ -1,0 +1,130 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+
+  /* 夜空渐变背景 */
+  background: linear-gradient(135deg, #0d1117 0%, #1e2329 50%, #000000 100%);
+  color: #e6edf3;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 三层星空 */
+.stars,
+.stars2,
+.stars3 {
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 小星星层 */
+.stars {
+  background: radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 70% 80%, white, transparent),
+    radial-gradient(1px 1px at 50% 60%, white, transparent),
+    radial-gradient(1px 1px at 90% 10%, white, transparent),
+    radial-gradient(1px 1px at 10% 50%, white, transparent);
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: moveStars 60s linear infinite, twinkle 2s infinite alternate;
+  opacity: 0.6;
+}
+
+/* 中等星星层 */
+.stars2 {
+  background: radial-gradient(2px 2px at 30% 40%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(2px 2px at 80% 20%, white, transparent);
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  animation: moveStars 120s linear infinite, twinkle 3s infinite alternate;
+  opacity: 0.4;
+}
+
+/* 大星星层 */
+.stars3 {
+  background: radial-gradient(3px 3px at 50% 50%, white, transparent),
+    radial-gradient(3px 3px at 70% 30%, white, transparent);
+  background-repeat: repeat;
+  background-size: 500px 500px;
+  animation: moveStars 180s linear infinite, twinkle 4s infinite alternate;
+  opacity: 0.3;
+}
+
+/* 流动动画 */
+@keyframes moveStars {
+  from {
+    transform: translateX(0) translateY(0);
+  }
+
+  to {
+    transform: translateX(-1000px) translateY(-500px);
+  }
+}
+
+/* 闪烁动画 */
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
+}
+
+.archive-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #e6edf3;
+}
+
+.archive-year {
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 1rem 0 0.5rem;
+}
+
+.archive-month {
+  font-size: 1.1rem;
+  margin-left: 1.5rem;
+  cursor: pointer;
+  display: none;
+  /* 默认隐藏 */
+}
+
+.archive-posts {
+  margin-left: 3rem;
+  display: none;
+  /* 默认隐藏 */
+}
+
+.archive-posts a {
+  display: block;
+  color: #79c0ff;
+  text-decoration: none;
+  margin: 0.2rem 0;
+}
+
+.archive-posts a:hover {
+  text-decoration: underline;
+}

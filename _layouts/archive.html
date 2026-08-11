@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/archive.css' | relative_url }}">
+</head>
+
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/archive/' | relative_url }}">Archive</a></li>
+        <li><a href="{{ '/deadline/' | relative_url }}">deadline</a></li>
+        <li><a href="{{ '/road/' | relative_url }}">road</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <main class="archive-container">
+    {% assign posts_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+    {% for year in posts_by_year %}
+    <div class="archive-year">{{ year.name }}</div>
+    {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%B'" %}
+    {% for month in posts_by_month %}
+    <div class="archive-month">{{ month.name }}</div>
+    <div class="archive-posts">
+      {% for post in month.items %}
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    {% endfor %}
+  </main>
+
+
+
+  <footer>
+    &copy; {{ site.time | date: '%Y' }} {{ site.title }}
+  </footer>
+
+  <script>
+    // 点击年份显示/隐藏月份
+    document.querySelectorAll(".archive-year").forEach(year => {
+      year.addEventListener("click", () => {
+        let next = year.nextElementSibling;
+        while (next && !next.classList.contains('archive-year')) {
+          if (next.classList.contains('archive-month')) {
+            next.style.display = (next.style.display === 'block') ? 'none' : 'block';
+          }
+          next = next.nextElementSibling;
+        }
+      });
+    });
+
+    // 点击月份显示/隐藏文章列表
+    document.querySelectorAll(".archive-month").forEach(month => {
+      month.addEventListener("click", () => {
+        const posts = month.nextElementSibling;
+        if (posts && posts.classList.contains('archive-posts')) {
+          posts.style.display = (posts.style.display === 'block') ? 'none' : 'block';
+        }
+      });
+    });
+
+    //密码是：随机漫步
+    // 改造后的密码验证逻辑（核心）
+    (function () {
+      const PASSWORD_KEY = "randomWalk_auth"; // 存储验证状态的key
+      const CORRECT_PASSWORD = "随机漫步";   // 你的密码
+
+      // 第一步：检查会话中是否已有验证通过的状态
+      const isAuthenticated = sessionStorage.getItem(PASSWORD_KEY) === "true";
+
+      // 如果已验证通过，直接跳过密码输入
+      if (isAuthenticated) {
+        return; // 终止函数，不执行后续验证逻辑
+      }
+
+      // 第二步：未验证过，执行密码输入逻辑
+      function verifyPassword() {
+        const userInput = prompt("请输入访问密码（随便输入）：");
+
+        // 处理用户取消输入的情况
+        if (userInput === null) {
+          alert("您取消了验证！");
+          window.location.href = "/road/";
+          return;
+        }
+
+        // 密码正确：保存验证状态到会话存储
+        if (userInput === CORRECT_PASSWORD) {
+          sessionStorage.setItem(PASSWORD_KEY, "true"); // 标记为已验证
+          alert("密码正确，欢迎访问！");
+        }
+        // 密码错误：跳转到road页面
+        else {
+          alert("密码错误！");
+          window.location.href = "/road/";
+        }
+      }
+
+      // 执行密码验证
+      verifyPassword();
+    })();
+  </script>
+
+
+</body>
+
+</html>

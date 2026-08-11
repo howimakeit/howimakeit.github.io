@@ -286,6 +286,7 @@ footer {
   margin-top: auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.9rem;
+<<<<<<< HEAD
 }
 
 /* --- 图片点击放大遮罩 --- */
@@ -317,3 +318,6 @@ footer {
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
     cursor: zoom-out;
 }
+=======
+}
+>>>>>>> 0af13664151a39748aca8fc63e77fc3336488610

@@ -1,0 +1,159 @@
+---
+layout: post-page
+title:  "wondershare-品牌投放中台"
+date:   2026-09-26
+categories: 
+excerpt: "没人知道当下是什么样的；错过了9月，是错过了许多机会吗？我不知道，一起走吧，走向下一个未知"
+image: '/assets/images/road/TecDo-carty_DSP/01.png'
+---
+
+<h1 style='text-align:center;'>wondershare - AO</h1>
+
+<p>图片有点小，或许要麻烦您点击进去浏览，滚轮可以放大缩小，esc和点击外部黑幕可退出</p>
+
+<img src="/assets/images/road/万兴-品投中台/ws.png"
+     class="single-image"
+     style="cursor:zoom-in; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,0.25); max-width:100%; height:auto; display:block; margin:1.5rem auto;"
+     onclick="
+        /* 阻止事件冒泡 */
+        event.stopPropagation();
+        (function(el) {
+            /* ===================== 1. 准备元素 ===================== */
+            var src = el.src;
+            /* 遮罩层（全屏半透明黑底） */
+            var overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;' +
+                                    'background:rgba(0,0,0,0.92);z-index:99999;' +
+                                    'overflow:hidden;cursor:default;';
+            /* 放大的图片 */
+            var img = document.createElement('img');
+            img.src = src;
+            img.draggable = false;
+            img.style.cssText = 'position:absolute;left:0;top:0;transform-origin:0 0;' +
+                                'border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.6);' +
+                                'user-select:none;-webkit-user-select:none;';
+            overlay.appendChild(img);
+            document.body.appendChild(overlay);
+            /* ===================== 2. 状态变量 ===================== */
+            var scale = 1,          /* 当前缩放倍数 */
+                tx = 0, ty = 0;     /* 图片左上角偏移 */
+            var baseW, baseH,       /* 图片初始显示宽高 */
+                overlayW, overlayH; /* 遮罩可视区域宽高 */
+            var isDragging = false, /* 是否正在拖拽 */
+                startMX, startMY,   /* 拖拽开始时鼠标坐标 */
+                startTX, startTY;   /* 拖拽开始时图片偏移 */
+            /* ===================== 3. 工具函数 ===================== */
+            /* 把当前的 scale 和 translate 应用到图片样式 */
+            function apply() {
+                img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+            }
+            /* 初始化：根据图片原始尺寸和屏幕大小，让图片适配并居中 */
+            function init() {
+                overlayW = overlay.clientWidth;
+                overlayH = overlay.clientHeight;
+                var maxW = overlayW * 0.92,
+                    maxH = overlayH * 0.92;
+                /* 图片原始尺寸（未加载完成时给默认值） */
+                var natW = img.naturalWidth || 800,
+                    natH = img.naturalHeight || 600;
+                /* 计算缩放比例，使图片不超出屏幕 92% */
+                var r = Math.min(maxW / natW, maxH / natH, 1);
+                baseW = natW * r;
+                baseH = natH * r;
+                /* 设置图片显示尺寸 */
+                img.style.width = baseW + 'px';
+                img.style.height = baseH + 'px';
+                /* 初始居中 */
+                tx = (overlayW - baseW) / 2;
+                ty = (overlayH - baseH) / 2;
+                apply();
+            }
+            /*
+             * 以鼠标点 (cx, cy) 为中心进行缩放
+             * factor: 缩放因子，>1 放大，<1 缩小
+             */
+            function zoomAt(cx, cy, factor) {
+                var rect = overlay.getBoundingClientRect();
+                var mx = cx - rect.left,  /* 鼠标在遮罩内的 x */
+                    my = cy - rect.top;   /* 鼠标在遮罩内的 y */
+                var newScale = Math.min(5, Math.max(0.3, scale * factor));
+                if (newScale === scale) return; /* 已达极值 */
+                /* 缩放前，鼠标指向图片上的点（相对于图片左上角） */
+                var imgX = mx - tx,
+                    imgY = my - ty;
+                /* 新的平移量：保持鼠标指向的点在缩放后仍在原来位置 */
+                tx = mx - imgX * (newScale / scale);
+                ty = my - imgY * (newScale / scale);
+                scale = newScale;
+                apply();
+            }
+            /* 关闭查看器并清除所有事件监听 */
+            function close() {
+                window.removeEventListener('mousemove', onMM);
+                window.removeEventListener('mouseup', onMU);
+                window.removeEventListener('keydown', onKD);
+                document.body.removeChild(overlay);
+            }
+            /* ===================== 4. 事件处理函数 ===================== */
+            /* 鼠标移动 —— 拖拽平移图片 */
+            function onMM(e) {
+                if (!isDragging) return;
+                var dx = e.clientX - startMX,
+                    dy = e.clientY - startMY;
+                tx = startTX + dx;
+                ty = startTY + dy;
+                apply();
+            }
+            /* 鼠标释放 —— 结束拖拽 */
+            function onMU() {
+                if (isDragging) {
+                    isDragging = false;
+                    overlay.style.cursor = 'default';
+                }
+            }
+            /* 键盘事件 —— ESC 键关闭 */
+            function onKD(e) {
+                if (e.key === 'Escape' || e.keyCode === 27) {
+                    close();
+                }
+            }
+            /* ===================== 5. 启动流程 ===================== */
+            /* 如果图片已经加载（缓存命中），直接初始化；否则等 onload */
+            if (img.complete) {
+                init();
+            } else {
+                img.onload = init;
+            }
+            /* ===================== 6. 绑定事件监听 ===================== */
+            /* 滚轮缩放（以鼠标位置为中心） */
+            overlay.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                var f = e.deltaY < 0 ? 1.1 : 0.9; /* 向上放大，向下缩小 */
+                zoomAt(e.clientX, e.clientY, f);
+            }, { passive: false });
+            /* 鼠标按下 —— 开始拖拽（仅在图片上按下有效，背景不会触发） */
+            overlay.addEventListener('mousedown', function(e) {
+                if (e.target === overlay) return; /* 点击遮罩空白区，不拖拽 */
+                e.preventDefault();
+                isDragging = true;
+                startMX = e.clientX;
+                startMY = e.clientY;
+                startTX = tx;
+                startTY = ty;
+                overlay.style.cursor = 'grabbing';
+            });
+            /* 全局监听：鼠标移动、鼠标释放、键盘按键（关闭时移除） */
+            window.addEventListener('mousemove', onMM);
+            window.addEventListener('mouseup', onMU);
+            window.addEventListener('keydown', onKD);
+            /* 点击遮罩空白区域关闭 */
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    close();
+                }
+            });
+            /* 阻止浏览器对图片的默认拖拽行为 */
+            img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+        })(this);  /* this 指向被点击的 img 元素 */
+        return false; /* 阻止默认行为 */
+     " />
